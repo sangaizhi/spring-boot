@@ -1,0 +1,55 @@
+Spring Boot 集成 Thymeleaf
+    step 1: 引入相关的jar
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+    step 2: 在 src/resources/static 下加入相关的js或者css
+             在 src/resources/templates 下创建相关的 html
+    step 3: html 文件的内容要求
+        1): 通过 xmlns:th="http://www.thymeleaf.org" 命名空间，将静态页面转为为动态页面
+            需要动态处理的元素将使用 th: 为前缀
+            <html lang="en" xmlns:th="http://www.thymeleaf.org">
+        2): 数据访问
+            ①: 通过“${}” 访问 model 中的属性
+            eg: <span th:text="${person.name}"></span>
+            ②: 通过 th:each="" 进行数据迭代
+            eg:<li class="list-group-item" th:each="p:${personList}">
+                   <span th:text="${p.name}"></span>
+                   <span th:text="${p.age}"></span>
+                   <button class="btn" th:onclick="'getName(\'' + ${p.name}+'\');'">获得名字</button>
+               </li>
+               其中 p 是迭代元素
+            ③: 数据判断
+                A: 通过 ${not #lists.isEmpty(集合)} 判断集合是否为空，支持 >、<、>=、<=、==、!= 等作为比较条件
+                   同时也支持将 SpringEL 表达式用于条件中。
+                B: 通过 th:if 和 th:unless  进行条件判断
+                 th:if="condition" 当条件成立时才显示当前标签
+                    eg: <p th:if="${p.age} &gt; 18" th:text="成年人"></p>
+                 th:unless="condition" 当条件不成立是才显示当前标签
+                    eg: <p th:unless="${p.age} &gt; 18" th:text="未成年人"></p>
+            ④: 引入URL
+                通过 @{} 引入URL
+                     eg: <a th:href="@{http://www.baidu.com}" target="_blank" th:text="打开百度"></a>
+            ⑤: 多路选择 th:switch="expression"
+                eg: <p th:switch="${p.sex}">
+                        <span th:case="0" th:text="男"></span>
+                        <span th:case="1" th:text="女"></span>
+                        <span th:case="*" th:text="未知"></span>
+                   </p>
+                   默认属性 default 可以用 * 表示
+            ⑥: Utilities
+                为了模板更加易用，Thymeleaf还提供了一系列Utility对象（内置于Context中），可以通过#直接访问：
+                A: 日期相关
+                    具体参考 org.thymeleaf.expression.Dates
+                    ${#dates.format(date, 'dd/MMM/yyyy HH:mm')}
+                    ${#dates.arrayFormat(datesArray, 'dd/MMM/yyyy HH:mm')}
+                    ${#dates.listFormat(datesList, 'dd/MMM/yyyy HH:mm')}
+                    ${#dates.setFormat(datesSet, 'dd/MMM/yyyy HH:mm')}
+                  eg: 参考 src/resources/templates/index.html
+                B: 字符串相关
+                    具体参考 org.thymeleaf.expression.Strings 类
+                  eg: 参考 src/resources/templates/index.html
+
+
+

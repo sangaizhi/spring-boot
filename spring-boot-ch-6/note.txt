@@ -1,0 +1,73 @@
+一、Spring Boot 提供的自动配置
+    Spring Boot 提供自动配置在 spring-boot-autoconfigure jar 包的 org.springframework.boot.autoconfigure.web 包下。
+    1、通过 org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration中可以发现 Spring Boot 提供如下的自动配置：
+      1)、 ContentNegotiatingViewResolver
+            这是 Spring MVC 提供的一个特殊的 ViewResolver, ContentNegotiatingViewResolver 不是自己处理 View，
+            而是代理给不同的 ViewResolver 来处理不同的 View，所以它由最高的权限。
+            源码：
+                ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
+                resolver.setContentNegotiationManager((ContentNegotiationManager)beanFactory.getBean(ContentNegotiationManager.class));
+                resolver.setOrder(-2147483648);
+      2)、BeanNameViewResolver
+            在控制器(Controller) 中的一个方法的返回值的字符串（视图名）会根据 BeanNameViewResolver 去查找 Bean 名称为返回字符串的 View
+            来渲染视图。
+      3)、InternalResourceViewResolver
+            这是一个极为常用的 ViewResolver，主要通过设置前缀、后缀，以及控制器中的方法来返回视图名的字符串，以得到实际页面。
+            源码：
+                InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+                resolver.setPrefix(this.mvcProperties.getView().getPrefix());
+                resolver.setSuffix(this.mvcProperties.getView().getSuffix());
+    2、自动配置的静态资源
+        在 org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration 的 addResourceHandlers 方法中定义了以下静态资源的自动配置。
+      1)、 类路径文件
+            把类路径文件下的 /static、 /public、 /resources 和 /META-INF/resources 文件夹下的静态文件直接映射为/**, 可以直接通过浏览器访问。
+      2)、 webjar
+           webjar 是将我们常用的脚本框架封装在 jar 包中的 jar 包。
+           把 webjar 的 /META-INF/resources/webjars 下的静态文件映射为/webjar/**,可以通过 http://localhost:8080/webjar/** 来访问。
+    3、自动配置的 Formatter 和 Converter
+        在 org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration 的 addFormatters 方法中，Spring Boot 会自动注册我们定义的
+        Converter、GenericConverter 和 Formatter。
+        源码：
+        @Override
+        public void addFormatters(FormatterRegistry registry) {
+            for (Converter<?, ?> converter : getBeansOfType(Converter.class)) {
+                registry.addConverter(converter);
+            }
+            for (GenericConverter converter : getBeansOfType(GenericConverter.class)) {
+                registry.addConverter(converter);
+            }
+            for (Formatter<?> formatter : getBeansOfType(Formatter.class)) {
+                registry.addFormatter(formatter);
+            }
+        }
+    4、自动配置的 HttpMessageConverters
+        // TODO  暂时还不清楚 messageConverters 是怎么初始化的
+        1)、源码：
+            private final HttpMessageConverters messageConverters;
+            @Override
+            public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+                converters.addAll(this.messageConverters.getConverters());
+            }
+        2)、除了我们在 Spring MVC 里自动注册 的 ByteArrayHttpMessageConverter、StringHttpMessageConverter、
+            ResourcesHttpMessageConverter、SourceHttpMessageConverter、AllEncompassingFormMessageConverter之外，
+            HttpMessageConverters 还会自动注册HttpMessageConverters AutoConfiguration 的自动配置文件里引入的
+            JacksonHttpMessageConvertersConfiguration 和 GsonHttpNessageConvertereConfiguration。使得Spring Boot
+            获得了额外的HttpMessageConverter:
+            A、若 jackson 的 jar 包在类路径上，则 Spring Boot 通过 JacksonHttpMessageConvertersConfiguration 增加
+             MappingJackson2HttpMessageConverter 和 MappingJackson2XmlHttpMessageConverter
+            B、若 gson 的 jar 包在类路径上，则  通过 GsonHttpMessageConvertersConfiguration 增加 GsonHttpMessageConverter.
+        3)、在Spring Boot 中 如果要自定义的 HttpMessageConverter，则只需定义一个 HttpMessageConverters 的 Bean,然后在 Bean
+            中注册自定义的HttpMessageConverter即可。
+            eg:
+                @Bean
+                public HttpMessageConverters myMessageConverters(){
+                    HttpMessageConverter<?> myConverter1 = new MyMessageConverter1();
+                    HttpMessageConverter<?> myConverter2 = new MyMessageConverter2();
+                    return new HttpMessageConverters(myConverter1, myConverter2);
+                }
+    5、静态首页的支持
+        把静态 index.html 文件放在如下目录
+        A: classpath:/META-INF/resources/index.html;
+        B: classpath:/resources/index.html;
+        C: classpath:/static/index.html;
+        D: classpath:/public/index.html;

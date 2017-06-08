@@ -1,0 +1,9 @@
+一、@SpringBootApplication  注解
+    1、@SpringBootApplication 是Spring Boot 的核心注解，是一个组合注解，组合了以下注解：
+           @Configuration
+           @EnableAutoConfiguration  让 Spring Boot 根据类路径中的jar包依赖为当前项目进行自动配置
+           @ComponentScan
+       Spring Boot 会自动扫描 @SpringBootApplication 所在类 的同级包以及下级包的Bean。
+     2、关闭特定的配置
+     通过 @SpringBootApplication 的 exclude 参数可以关闭特定的自动配置
+     eg: @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})

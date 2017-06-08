@@ -1,0 +1,63 @@
+本节介绍常规属性配置
+ 一、 常规属性配置
+      在 application.properties 中定义属性，在字段上直接使用 @Value 注解
+ 二、基于 properties 的类型安全配置
+      通过 @ConfigurationProperties 将 properties 属性和一个 Bean 及其 属性关联，从而实现类型安全的配置。
+      由于在 Spring Boot 1.5.X 之后 @ConfigurationProperties 注解取消 location 属性，
+      所以采用 @PropertySource 注解来关联属性配置文件
+      @ConfigurationProperties 的属性:
+      prefix : 指定properties的配置的前缀
+ 三、日志配置
+      step 1: 引入 logger 相关的包
+            <dependency>
+      			<groupId>org.springframework.boot</groupId>
+      			<artifactId>spring-boot-starter-logging</artifactId>
+      		</dependency>
+      step 2: 在配置文件中配置日志文件的位置及级别
+            logging.file=D:/springboot/application.log
+            logging.level.org.springframework=debug
+ 四、Profile 配置
+       step 1: 分别新建 application-dev.properties 和 application-prod.properties
+               application-dev.properties 中配置端口为 8080
+               application-prod.properties 中配置端口为 9090
+       step 2: 在 application.properties 中指定活动的 profile
+               spring.profiles.active=prod
+ 五、Spring Boot 的 运行原理
+
+      1、先看 @SpringBootApplication 注解：
+        该注解是一个组合注解，核心功能由 @EnableAutoConfiguration 注解提供。
+        @EnableAutoConfiguration 的关键功能是 @Import 注解导入的配置功能。
+        @Import 通过 EnableAutoConfigurationImportSelector 使用  SpringFactoriesLoader.loadFactoryNames 方法来扫描具有 META-INF/spring.factories 文件的jar,
+        spring.factories 中声明了有哪些自动配置
+        eg： spring-boot-autoconfigure 的jar 下就有一个 spring.factories 文件
+            文件内容：
+                # Initializers
+                org.springframework.context.ApplicationContextInitializer=\
+                org.springframework.boot.autoconfigure.SharedMetadataReaderFactoryContextInitializer,\
+                org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer
+
+                # Application Listeners
+                org.springframework.context.ApplicationListener=\
+                org.springframework.boot.autoconfigure.BackgroundPreinitializer
+
+                # Auto Configuration Import Listeners
+                org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\
+                org.springframework.boot.autoconfigure.condition.ConditionEvaluationReportAutoConfigurationImportListener
+
+                # Auto Configuration Import Filters
+                org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+                org.springframework.boot.autoconfigure.condition.OnClassCondition
+                ...
+                ...
+      2、核心注解：
+             @ConditionalOnBean : 当容器里有指定的 Bean 的条件下；
+             @ConditionalOnClass : 当类路径下有指定的类条件下；
+             @ConditionalOnExpression : 基于 SpEL 表达式作为判断条件；
+             @ConditionalOnJava : 基于 JVM 版本作为判断条件；
+             @ConditionalONJndi : 在 JNDI 存在的条件下查找制定的位置；
+             @ConditionalOnMissingBean : 当容器里没有指定的 Bean 的情况下；
+             @ConditionalOnNotWebApplication : 当前项目不是 Web 项目的条件下；
+             @ConditionalInProperty : 指定的属性是否有指定的值；
+             @ConditionalOnResource : 类路径是否有指定的值；
+             @ConditionalOnSingleCandidate : 当指定 Bean 在容器中只有一个，或者虽然有多个但是指定首选的 Bean；
+             @ConditionalOnWebApplication : 当前项目是 Web 项目的条件下；

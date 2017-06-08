@@ -1,0 +1,5 @@
+本节演示定制Banner
+一、定制 Banner
+    1、在 src/main/resources 下新建一个 banner.txt,此时启动会自动加载定制的 Banner
+二、关闭Banner
+
