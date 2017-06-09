@@ -1,0 +1,12 @@
+一、配置 Tomcat
+    在 Spring Boot 中 通用的 Servlet 容器配置都以 "server" 作为前缀，
+    而 Tomcat 特有的配置都以 "server.tomcat" 作为前缀。
+    eg:
+        通用配置
+        server.port=8080 # 配置程序端口,默认为8080
+        server.session-timeout=60 #用户会话session过期时间，单位为秒
+        server.context-path=/path #配置访问路径，默认为 "/"
+        配置 Tomcat
+        server.tomcat.uri-encoding=UTF-8 #Tomcat编码，默认为UTF-8
+        server.tomcat.compression = off # Tomcat 是否开启压缩，默认为关闭 off
+
