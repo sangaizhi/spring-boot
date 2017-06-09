@@ -50,6 +50,3 @@ Spring Boot 集成 Thymeleaf
                 B: 字符串相关
                     具体参考 org.thymeleaf.expression.Strings 类
                   eg: 参考 src/resources/templates/index.html
-
-
-
