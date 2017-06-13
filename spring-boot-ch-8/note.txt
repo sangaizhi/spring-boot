@@ -1,0 +1,26 @@
+一、SSL 配置
+    1、生成证书
+        每一个 JDK 或者 JRE 里都有一个 keytool,它是一个证书管理工具，可以用来生成自签名的证书。
+        命令：eg: keytool -genkey -alias tomcat
+    2、Spring Boot 配置 SSL
+        在 application.properties 中做如下的 SSL 配置
+           ## 配置 SSL 证书文件名
+           server.ssl.key-store=.keystore
+           ## 配置 SSL 证书密码
+           server.ssl.key-store-password=tomcat
+           ## 配置 SSL 证书类型
+           server.ssl.key-store-type= JKS
+           ## 配置 SSL 证书别名
+           server.ssl.key-alias=tomcat
+    3、http 转向 https
+       step 1: 配置 org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory，
+               并添加 Tomcat 的 connector 来实现
+               eg:
+                org.sangaizhi.SpringBootCh8Application#tomcatServletFactory
+                和
+                org.sangaizhi.SpringBootCh8Application#httpConnector
+
+
+
+
+
