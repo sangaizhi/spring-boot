@@ -10,3 +10,57 @@
         server.tomcat.uri-encoding=UTF-8 #Tomcat编码，默认为UTF-8
         server.tomcat.compression = off # Tomcat 是否开启压缩，默认为关闭 off
 
+二、代码配置 Servlet 容器
+    1、通用配置
+        1)、方式一:
+            定义一个实现 org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer 接口的实现类，并且保证该类可以被 Spring Boot 扫描到.
+            eg:
+                @Component
+                public class CustomerServletContainer implements EmbeddedServletContainerCustomizer {
+                    @Override
+                    public void customize(ConfigurableEmbeddedServletContainer container) {
+                        container.setContextPath("/cusServlet1");
+                        container.setPort(8888);
+                    }
+                }
+        2)、方式二:
+            在当前已有的配置文件添加类的Bean，注意当前类必须声明为内部类:
+            eg:
+                @SpringBootApplication
+                public class SpringBootCh7Application {
+
+                    public static void main(String[] args) {
+                        SpringApplication.run(SpringBootCh7Application.class, args);
+                    }
+                    @Component
+                    public static class CustomerServletContainer implements EmbeddedServletContainerCustomizer{
+                        @Override
+                        public void customize(ConfigurableEmbeddedServletContainer container) {
+                            container.setContextPath("/cusServlet2");
+                            container.setPort(9999);
+                        }
+                    }
+                }
+    2、特定配置
+        以配置 Tomcat 为例
+        eg：
+            @Bean
+            public EmbeddedServletContainerFactory tomcatServletFactory(){
+                TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
+                factory.setPort(10001);
+                factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,"/404.html"));
+                factory.setSessionTimeout(5000);
+                return factory;
+            }
+        Jetty 容器使用 JettyEmbeddedServletContainerFactory
+
+三、Favicon 配置
+      1、关闭默认的Favicon
+         ## 关闭默认的favicon
+         spring.mvc.favicon.enabled=false
+      2、自定义 favicon
+        将 favicon.ico 文件放在 类路径根目录、类路径 META-INF/resources/下、类路径 resources/下、类路径 static/下
+        或者 类路径 public/ 下
+
+
+
