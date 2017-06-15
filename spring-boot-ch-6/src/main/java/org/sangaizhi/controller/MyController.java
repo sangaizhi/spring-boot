@@ -1,8 +1,5 @@
 package org.sangaizhi.controller;
 
-import org.sangaizhi.servlet.MyServlet;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http:www/thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body onload="disConnect()">
+<noscript>浏览器不支持Web Socket</noscript>
+<div>
+    <div>
+        <buttom id="connect" onclick="connect()">连接</buttom>
+        <buttom id="disconnect" disabled="disabled" onclick="disConnect()">断开连接</buttom>
+    </div>
+    <div id="message-div">
+        <label>名字</label><input type="text" id="name"/>
+        <br/>
+        <label>消息</label><input type="text" id="message"/>
+        <br/>
+        <button id="send" onclick="send()">发送</button>
+    </div>
+    <div id="response"></div>
+</div>
+<script th:src="@{sockjs.min.js}"></script>
+<script th:src="@{stomp.min.js}"></script>
+<script th:src="@{jquery.js}"></script>
+<script type="text/javascript">
+    var stompClient = null;
+    function setConnect(connected) {
+        document.getElementById("connect").disabled=connected;
+        document.getElementById("disconnect").disabled=!connected;
+        document.getElementById("message-div").style.visibility = connected ? "visible":"hidden";
+        $("#response").html();
+    }
+    function connect(){
+        var socket = new SockJS("/endpointsaz");
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame){
+            setConnect(true);
+            console.log("connected:" + frame);
+            stompClient.subscribe("/topic/getResponse", function(response){
+                showResponse(JSON.parse(response.body))
+            })
+        })
+    }
+    function showResponse(message){
+        var response = $("#response");
+        response.append("<br/>"+message.name+":"+message.message);
+    }
+
+    function disConnect(){
+        if (stompClient != null){
+            stompClient.disconnect();
+        }
+        setConnect(false);
+    }
+    function send(){
+        var name = $("#name").val();
+        var message = $("#message").val();
+        stompClient.send("/say",{}, JSON.stringify({'name':name,'message':message}))
+    }
+</script>
+</body>
+</html>
