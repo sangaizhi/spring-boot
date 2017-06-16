@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http:www/thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Login page</title>
 </head>
 <body>
@@ -13,9 +13,9 @@
     you were logout
 </div>
 <form th:action="@{/login}" method="POST">
-    <p><label>account</label><input type="text" name="username"></p>
-    <p><label>password</label><input type="password" name="password"></p>
-    <p><input type="submit" value="login"></p>
+    <p><label>account</label><input type="text" name="username" /></p>
+    <p><label>password</label><input type="password" name="password" /></p>
+    <p><input type="submit" value="login" /></p>
 </form>
 </body>
 </html>

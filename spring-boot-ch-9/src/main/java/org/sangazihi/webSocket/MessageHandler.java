@@ -1,10 +1,15 @@
-package org.sangazihi.webSocket.broadcast;
+package org.sangazihi.webSocket;
 
 import org.sangazihi.webSocket.message.ReceiveMessage;
 import org.sangazihi.webSocket.message.SendMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.support.ExecutorSubscribableChannel;
 import org.springframework.stereotype.Controller;
+
+import java.security.Principal;
 
 /**
  * @author sangaizhi
@@ -12,6 +17,9 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class MessageHandler {
+
+    private SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new ExecutorSubscribableChannel());
+
 
     /**
      * 浏览器向服务器发送消息
@@ -29,5 +37,14 @@ public class MessageHandler {
     public SendMessage say(ReceiveMessage message) throws InterruptedException {
         Thread.sleep(3000);
         return new SendMessage(message.getName(),message.getMessage());
+    }
+
+    @MessageMapping("/chat")
+    public void handlerChat(Principal principal, ReceiveMessage message){
+        if(principal.getName().equals("sangaizhi")){
+            messagingTemplate.convertAndSendToUser("sangzongjie","queue/notifications", principal.getName()+"-send:"+message.getMessage());
+        }else{
+            messagingTemplate.convertAndSendToUser("sangaizhi","queue/notifications", principal.getName()+"-send:"+message.getMessage());
+        }
     }
 }
