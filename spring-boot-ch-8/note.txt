@@ -16,9 +16,9 @@
        step 1: 配置 org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory，
                并添加 Tomcat 的 connector 来实现
                eg:
-                org.sangaizhi.SpringBootCh8Application#tomcatServletFactory
+                SpringBootCh8Application#tomcatServletFactory
                 和
-                org.sangaizhi.SpringBootCh8Application#httpConnector
+                SpringBootCh8Application#httpConnector
 
 
 

@@ -25,7 +25,7 @@
            webjar 是将我们常用的脚本框架封装在 jar 包中的 jar 包。
            把 webjar 的 /META-INF/resources/webjars 下的静态文件映射为/webjar/**,可以通过 http://localhost:8080/webjar/** 来访问。
       3)、Spring Boot 自定义静态资源
-        参考 org.sangaizhi.MyWebMvc#addResourceHandlers 方法
+        参考 MyWebMvc#addResourceHandlers 方法
     3、自动配置的 Formatter 和 Converter
         在 org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration 的 addFormatters 方法中，Spring Boot 会自动注册我们定义的
         Converter、GenericConverter 和 Formatter。
@@ -67,8 +67,8 @@
                     return new HttpMessageConverters(myConverter1, myConverter2);
                 }
                 可以参考
-                    org.sangaizhi.MyWebMvc#extendMessageConverters
-                    org.sangaizhi.MyWebMvc#converter
+                    MyWebMvc#extendMessageConverters
+                    MyWebMvc#converter
                     方法
     5、静态首页的支持
         把静态 index.html 文件放在如下目录
@@ -86,7 +86,7 @@
         2)、代码方式
             step 1: 定义一个 Class，并且继承 HttpServlet
             step 2: 在被 @SpringBootApplication 注解的类中注册该 Servlet，注册需要使用 ServletRegistrationBean 这个Bean
-                    参考示例：org.sangaizhi.SpringBootCh6Application#myServlet#myServlet 方法
+                    参考示例：SpringBootCh6Application#myServlet#myServlet 方法
             step 3: 重启应用
     2、自定义 Filter
         1)、注解方式
@@ -96,7 +96,7 @@
         2)、代码方式
             step 1: 定义一个 Class，并且实现 Filter 接口
             step 2: 在被 @SpringBootApplication 注解的类中注册该 Filter，注册需要使用 FilterRegistrationBean 这个Bean
-                    参考示例：org.sangaizhi.SpringBootCh6Application#myServlet#myFilter 方法
+                    参考示例：SpringBootCh6Application#myServlet#myFilter 方法
             step 3: 重启应用
     3、自定义 Listener
         1)、注解方式
@@ -106,11 +106,11 @@
         2)、代码方式
             step 1: 定义一个 Class，并且实现要监听的事件的对应接口
             step 2: 在被 @SpringBootApplication 注解的类中注册该 Listener，注册需要使用 ServletListenerRegistrationBean 这个Bean
-                    参考示例：org.sangaizhi.SpringBootCh6Application#myServlet#myListener 方法
+                    参考示例：SpringBootCh6Application#myServlet#myListener 方法
             step 3: 重启应用
     4、自定义拦截器
         step 1: 定义Class并且继承 HandlerInterceptorAdapter，重写 preHandle、postHandle 和 afterCompletion 等方法
         step 2: 在被 @EnableWebMvc 注解的类中注册该 Interceptor, 需要使用 InterceptorRegistry 这个 Bean
-                具体参考 org.sangaizhi.MyWebMvc#addInterceptors 方法
+                具体参考 MyWebMvc#addInterceptors 方法
 
 

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.sangaizhi.MessageServiceAutoConfiguration
+  org.sangaizhi.springboot.ch4.MessageServiceAutoConfiguration
