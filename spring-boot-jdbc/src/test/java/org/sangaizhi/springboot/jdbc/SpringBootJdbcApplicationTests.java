@@ -38,9 +38,7 @@ public class SpringBootJdbcApplicationTests {
 				}
 			}
 		}
-
 		userService.deleteByName("zhangsan3");
-
 	}
 
 }
