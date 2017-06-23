@@ -18,7 +18,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
@@ -31,11 +33,13 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
  */
 
 @Configuration
-@MapperScan(basePackages = "org.sangaizhi.springboot.mapper")
+@MapperScan(basePackages ={"org.sangaizhi.springboot.mapper", "org.sangaizhi.springboot.dao"})
 public class MyBatisConfiguration {
 
+	private static final String MAPPER_PATH = "/mapper/**.xml";
 	@Autowired
 	private Environment environment;
+	private java.lang.String MYBATIS_CONFIG = "mybatis-config.xml";
 
 	/**
 	 * 创建数据源
@@ -93,20 +97,23 @@ public class MyBatisConfiguration {
 	public SqlSessionFactory sqlSessionFactory(DynamicDataSource dataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-//		sqlSessionFactoryBean.setTypeAliasesPackage(environment.getProperty("mybatis.typeAliasesPackage"));
-//		sqlSessionFactoryBean.setMapperLocations(
-//			new PathMatchingResourcePatternResolver().getResources(environment.getProperty("mybatis.mapperLocations")));
+		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource(MYBATIS_CONFIG));
+		sqlSessionFactoryBean.setTypeAliasesPackage(environment.getProperty("mybatis.typeAliasesPackage"));
+		PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
+		sqlSessionFactoryBean.setMapperLocations(
+			pathMatchingResourcePatternResolver.getResources(environment.getProperty("mybatis.mapperLocations")));
 		return sqlSessionFactoryBean.getObject();
 	}
 
-    /**
-     * 配置事务管理器
-     * @param dataSource
-     * @return
-     */
+	/**
+	 * 配置事务管理器
+	 * 
+	 * @param dataSource
+	 * @return
+	 */
 	@Bean
-	public DataSourceTransactionManager transactionManager(DynamicDataSource dataSource){
-	    return new DataSourceTransactionManager(dataSource);
-    }
+	public DataSourceTransactionManager transactionManager(DynamicDataSource dataSource) {
+		return new DataSourceTransactionManager(dataSource);
+	}
 
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.sangaizhi.springboot.dao.ProductDetailDao">
+
+    <select id="getById" resultType="org.sangaizhi.springboot.model.ProductDetail">
+        SELECT
+          pd.id AS id,
+          pd.product_id AS productId,
+          pd.detail AS detail
+        FROM t_product_detail pd
+        WHERE pd.id = #{id}
+    </select>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_product_detail(id, product_id, detail) values(#{id},#{productId},#{detail})
+    </insert>
+</mapper>
