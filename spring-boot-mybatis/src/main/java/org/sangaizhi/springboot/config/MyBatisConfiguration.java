@@ -39,7 +39,7 @@ public class MyBatisConfiguration {
 	private static final String MAPPER_PATH = "/mapper/**.xml";
 	@Autowired
 	private Environment environment;
-	private java.lang.String MYBATIS_CONFIG = "mybatis-config.xml";
+	private String MYBATIS_CONFIG = "mybatis-config.xml";
 
 	/**
 	 * 创建数据源

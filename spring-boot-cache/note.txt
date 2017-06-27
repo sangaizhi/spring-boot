@@ -1,0 +1,44 @@
+一、Spring 缓存支持
+    Spring 定义了 org.springframework.cache.CacheManager 和 org.springframework.cache.Cache 接口来统一不同的缓存技术。
+    CacheManger 是 Spring提供的各种缓存技术的抽象接口。
+    1、Spring 支持的 CacheManager
+        SimpleCacheManager: 使用简单的 Collection 来存储缓存，主要用于测试。
+        ConcurrentMapCacheManager: 使用 ConcurrentMap 存储。
+        NoOpCacheManager: 仅用于测试，不会实际存储缓存。
+        EhCacheCacheManager: 使用 EhCache 作为缓存。
+        GuavaCacheManager: 使用 Google Guava 的 GuavaCache作为缓存技术。
+        HazelcastCacheManager: 使用 Hazelcast作为缓存技术。
+        JCacheCacheManager: 使用JCache 标准的实现作为缓存技术，eg:Apache Commons JCS
+        RedisCacheManager: 使用 Redis 作为缓存技术。
+
+        在使用任意一个实现的 CacheManager 的时候，需注册实现的 CacheManager 的 Bean。
+        但不要忘记配置 CacheManager
+        eg:
+            @Bean
+            public EhCacheCacheManager cacheManager(CacheManager ehCacheCacheManager) {
+                return new EhCacheCacheManager(ehCacheCacheManager);
+            }
+    2、声明式缓存注解
+        @Cacheable: 在方法执行前 Spring 先查看缓存中是否有数据，如果有数据，则直接返回缓存数据；
+                    若没有，调用方法并将方法的返回值放进缓存。
+        @CachePut: 无论怎样，都会将方法的返回值放到缓存中。@CachePut 的属性与@Cacheable 保持一致。
+        @CacheEvict: 将一条或多条数据从缓存中删除。
+        @Caching: 可以通过 @Caching 注解组合多个注解策略在一个方法上。
+    3、开启声明式缓存支持
+        在配置类上使用 @EnableCaching 注解即可。
+
+二、Spring Boot 对缓存的支持
+    Spring Boot 的自动配置放置在 org.springframework.boot.autoconfigure.cache 包中。
+    Spring Boot 支持已 "spring.cache" 为前缀的属性来配置缓存
+    eg：
+        spring.cache.type: 缓存技术类型，可选 generic、ehcache、hazelcast、infinispan、jcache、redis、guava、simple、none
+        spring.cache.cache-names: 程序启动时创建的缓存名称
+        spring.cache.ehcache.config: ehcache 配置文件地址
+        spring.cache.hazelcast.config: hazelcast 配置文件地址
+        spring.cache.infinispan.config: infinispan 配置文件地址
+        spring.cache.jcache.config: jcache 配置文件地址
+        spring.cache.jcache.provider: 当多个 jcache 实现类在类路径中的时候，指定 jcache 实现
+        spring.cache.guava.spec: guava specs
+
+
+
