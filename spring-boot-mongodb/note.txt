@@ -1,0 +1,33 @@
+一、Spring 支持
+    Spring 对 MongoDB 的支持主要是通过Spring Data MongoDB 来实现的。
+    1、Spring Data MongoDB 的 Object/Document 映射注解支持
+        --------------------------------------------------------------------------
+        |           注解             |                 描述                      |
+        --------------------------------------------------------------------------
+        |    @Document               |       映射领域对象与MongoDB的一个文档     |
+        --------------------------------------------------------------------------
+        |    @Id                     |       映射当前属性是ID                    |
+        --------------------------------------------------------------------------
+        |    @DbRef                  |       当前属性将参考其他的文档            |
+        --------------------------------------------------------------------------
+        |    @Field                  |       为文档的属性定义名称                |
+        --------------------------------------------------------------------------
+        |    @Version                |       将当前属性作为版本                  |
+        --------------------------------------------------------------------------
+    2、Spring Data MongoDB 的 MongoTemplate
+       MongoTemplate 提供了数据访问的方法。我们主需要为 MongoClient 以及 MongoDbFactory 配置数据库连接属性。
+    3、Spring Data MongoDB 的 Repository
+       MongoDB 的 Repository的支持开启需要在配置类上注解 @EnableMongoRepositories
+
+二、Spring Boot的支持
+       Spring Boot 对 MongoDB的支持主要是在 org.springframework.boot.autoconfigure.mongo 包中。
+       主要是配置数据库连接，MongoTemplate。 可以使用以"spring.boot.mongodb" 开头的属性来配置。
+       Spring Boot 提供的默认属性
+       端口：27017
+       服务器：localhost
+       数据库：test
+       eg: 摘自 org.springframework.boot.autoconfigure.mongo.MongoProperties
+            public static final int DEFAULT_PORT = 27017;
+            public static final String DEFAULT_URI = "mongodb://localhost/test";
+
+        spring boot 为我们开启了Repository的支持，即自动为我们配置了 @EnableMongoRepositories
