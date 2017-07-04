@@ -1,0 +1,13 @@
+一、Spring 的支持
+    Spring 对 redis 的支持主要是通过Spring Data Redis 来实现的。
+    Spring Data Redis 提供了连接喜爱那个管的 ConnectionFactory和数据操作相关的 RedisTemplate
+
+    1、定义 Serializer
+    当我们的数据存储到redis的时候，数据都是通过 Spring 提供的 Serializer 序列化到数据库的，
+    RedisTemplate 默认使用的是 JdkSerializationRedisSerializer
+    StringRedisTemplate默认使用的是 StringRedisSerializer
+
+二、Spring Boot的支持
+       Spring Boot 对 redis 的支持主要是在 org.springframework.boot.autoconfigure.redis 包中。
+        RedisAutoConfiguration 已经自动配置了 JedisConnectoryFactory、RedisFactory以及StringRedisTemplate
+        可以使用以"spring.redis" 开头的属性配置Redis

@@ -21,7 +21,7 @@
 
 二、Spring Boot的支持
        Spring Boot 对 MongoDB的支持主要是在 org.springframework.boot.autoconfigure.mongo 包中。
-       主要是配置数据库连接，MongoTemplate。 可以使用以"spring.boot.mongodb" 开头的属性来配置。
+       主要是配置数据库连接，MongoTemplate。 可以使用以"spring.data.mongodb" 开头的属性来配置。
        Spring Boot 提供的默认属性
        端口：27017
        服务器：localhost
