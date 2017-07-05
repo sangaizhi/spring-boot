@@ -21,13 +21,13 @@ public class SpringBootRedisApplicationTests {
 
 	@Test
 	public void testPut() {
-		User user = new User(1L, "sangaizhi", 24, "深圳市");
-		redisUtil.put("user." + 1, user);
+		User user = new User(2L, "sangaizhi", 24, "深圳市");
+		redisUtil.put("user." + 2, user);
 	}
 
 	@Test
 	public void testGet() {
-		User user = redisUtil.getCache("user.1", User.class);
+		User user = redisUtil.getCache("user.2", User.class);
 		System.out.println(user);
 	}
 
